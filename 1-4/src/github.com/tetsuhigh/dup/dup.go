@@ -13,6 +13,7 @@ import (
 */
 func main() {
 	// keyがstring、valueがintの空mapを生成する
+	// TODO keyが重複してるのが無駄。C#のtuple的なのがある？
 	counts := make(map[string]int)
 	files := make(map[string][]string)
 
