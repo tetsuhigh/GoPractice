@@ -8,7 +8,7 @@ import (
 )
 
 /*
- 引数で指定されたURLにある内容を表示する
+ 練習問題1-7 引数で指定されたURLにある内容を表示する
 */
 func main() {
 	for _, url := range os.Args[1:] {
