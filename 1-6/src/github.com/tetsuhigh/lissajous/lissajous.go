@@ -14,19 +14,10 @@ import (
 // 先頭の色が初期背景色になる。
 var palette = []color.Color{
 	color.Black,
-	color.White,
-	color.RGBA{0xff, 0x00, 0x00, 0xff},
-	color.RGBA{0x00, 0xff, 0x00, 0xff},
-	color.RGBA{0x00, 0x00, 0xff, 0xff},
 }
 
-// 定数、パッケージ全体で見える
 const (
-	whiteIndex = 1 // 白のバレットでの位置
-	blackIndex = 0 // 黒のバレットでの位置
-	redIndex   = 2 // 赤のバレットでの位置
-	greenIndex = 3 // 緑のバレットでの位置
-	blueIndex  = 4 // 青のバレットでの位置
+	randColorCount = 10
 )
 
 /*
@@ -34,6 +25,11 @@ const (
  "lissajous > out.gif"とすることで、out.gifに出力することができる
 */
 func main() {
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < randColorCount; i++ {
+		palette = append(palette, color.RGBA{uint8(rand.Intn(255)), uint8(rand.Intn(255)), uint8(rand.Intn(255)), 0xff})
+	}
+
 	rand.Seed(time.Now().UTC().UnixNano())
 	lissajous(os.Stdout)
 }
@@ -60,7 +56,7 @@ func lissajous(out io.Writer) {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 			// (x, y)の位置の色を変更する、白、赤、青、黄からランダムに色を選択する
-			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), (uint8)((rand.Intn(3))+1))
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), uint8(rand.Intn(randColorCount)+1))
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
