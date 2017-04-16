@@ -11,12 +11,14 @@ import (
 	"time"
 )
 
-var palette = []color.Color{color.White, color.Black}
+// 先頭の色が初期背景色になる。
+var palette = []color.Color{color.Black, color.RGBA{0x00, 0xff, 0x00, 0xff}, color.White}
 
 // 定数、パッケージ全体で見える
 const (
-	whiteIndex = 0 // バレットの最初の色
-	blackIndex = 1 // バレットの次の色
+	whiteIndex = 3 // 白のバレットでの位置
+	blackIndex = 0 // 黒のバレットでの位置
+	greenIndex = 1 // 緑のバレットでの位置
 )
 
 /*
@@ -42,12 +44,14 @@ func lissajous(out io.Writer) {
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0 // 位相差
 	for i := 0; i < nframes; i++ {
+		// 201x201のpaletteの先頭の色で塗りつぶされた画像を生成する
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
 		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
-			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), blackIndex)
+			// (x, y)の位置の色を変更する
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), greenIndex)	
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
